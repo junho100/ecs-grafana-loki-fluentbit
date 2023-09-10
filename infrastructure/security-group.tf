@@ -3,13 +3,20 @@
 ################################################
 
 module "sg_for_bastion_host" {
-  source  = "terraform-aws-modules/security-group/aws"
+  source = "terraform-aws-modules/security-group/aws"
 
   name        = "${local.global_name_prefix}-bastion-host-sg"
   description = "sg for bastion host"
   vpc_id      = module.vpc.vgw_id
 
   ingress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 20000
+      protocol    = "tcp"
+      description = "allow temp all"
+      cidr_blocks = "0.0.0.0/0"
+    },
     {
       from_port   = 22
       to_port     = 22
@@ -21,7 +28,7 @@ module "sg_for_bastion_host" {
 }
 
 module "sg_for_rds" {
-  source  = "terraform-aws-modules/security-group/aws"
+  source = "terraform-aws-modules/security-group/aws"
 
   name        = "${local.global_name_prefix}-rds-sg"
   description = "sg for rds instance"
@@ -29,6 +36,13 @@ module "sg_for_rds" {
 
   ingress_with_cidr_blocks = [
     {
+      from_port   = 0
+      to_port     = 20000
+      protocol    = "tcp"
+      description = "allow temp all"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
       from_port   = 3306
       to_port     = 3306
       protocol    = "tcp"
@@ -39,17 +53,17 @@ module "sg_for_rds" {
 
   ingress_with_source_security_group_id = [
     {
-      from_port   = 3306
-      to_port     = 3306
-      protocol    = "tcp"
-      description = "allow 3306 from vpn ip address"
+      from_port                = 3306
+      to_port                  = 3306
+      protocol                 = "tcp"
+      description              = "allow 3306 from vpn ip address"
       source_security_group_id = module.security_group_for_ecs_node.security_group_id
     }
   ]
 }
 
 module "security_group_for_ecs_node" {
-  source  = "terraform-aws-modules/security-group/aws"
+  source = "terraform-aws-modules/security-group/aws"
 
   name        = "${local.global_name_prefix}-ecs-node-sg"
   description = "sg for ecs nodes"
@@ -57,6 +71,13 @@ module "security_group_for_ecs_node" {
 
   ingress_with_cidr_blocks = [
     {
+      from_port   = 0
+      to_port     = 20000
+      protocol    = "tcp"
+      description = "allow temp all"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
       from_port   = 3306
       to_port     = 3306
       protocol    = "tcp"
@@ -67,10 +88,10 @@ module "security_group_for_ecs_node" {
 
   ingress_with_source_security_group_id = [
     {
-      from_port   = 3306
-      to_port     = 3306
-      protocol    = "tcp"
-      description = "allow 3306 from vpn ip address"
+      from_port                = 3306
+      to_port                  = 3306
+      protocol                 = "tcp"
+      description              = "allow 3306 from vpn ip address"
       source_security_group_id = module.security_group_for_ecs_node.security_group_id
     }
   ]
