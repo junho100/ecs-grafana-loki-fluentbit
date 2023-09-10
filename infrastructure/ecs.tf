@@ -48,7 +48,7 @@ resource "aws_ecs_service" "grafana" {
 ################################################################################
 
 data "template_file" "grafana" {
-  template = file("./grafana.json.tpl")
+  template = file("./grafana.tftpl")
 }
 
 module "autoscaling" {
