@@ -21,3 +21,19 @@ variable "db_password" {
   type        = string
   default     = "admin123!"
 }
+
+variable "grafana_docker_image_url" {
+  description = "grafana docker image url"
+  type        = string
+}
+
+variable "loki_docker_image_url" {
+  description = "loki docker image url"
+  type        = string
+}
+
+variable "backend_docker_image_url" {
+  description = "backend docker image url"
+  type        = string
+  default     = ""
+}

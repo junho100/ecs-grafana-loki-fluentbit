@@ -7,12 +7,12 @@ module "sg_for_bastion_host" {
 
   name        = "${local.global_name_prefix}-bastion-host-sg"
   description = "sg for bastion host"
-  vpc_id      = module.vpc.vgw_id
+  vpc_id      = module.vpc.vpc_id
 
   ingress_with_cidr_blocks = [
     {
       from_port   = 0
-      to_port     = 20000
+      to_port     = 65535
       protocol    = "tcp"
       description = "allow temp all"
       cidr_blocks = "0.0.0.0/0"
@@ -25,6 +25,8 @@ module "sg_for_bastion_host" {
       cidr_blocks = var.vpn_ip_address
     },
   ]
+
+  egress_rules = ["all-all"]
 }
 
 module "sg_for_rds" {
@@ -37,7 +39,7 @@ module "sg_for_rds" {
   ingress_with_cidr_blocks = [
     {
       from_port   = 0
-      to_port     = 20000
+      to_port     = 65535
       protocol    = "tcp"
       description = "allow temp all"
       cidr_blocks = "0.0.0.0/0"
@@ -60,6 +62,8 @@ module "sg_for_rds" {
       source_security_group_id = module.security_group_for_ecs_node.security_group_id
     }
   ]
+
+  egress_rules = ["all-all"]
 }
 
 module "security_group_for_ecs_node" {
@@ -72,7 +76,7 @@ module "security_group_for_ecs_node" {
   ingress_with_cidr_blocks = [
     {
       from_port   = 0
-      to_port     = 20000
+      to_port     = 65535
       protocol    = "tcp"
       description = "allow temp all"
       cidr_blocks = "0.0.0.0/0"
@@ -95,4 +99,26 @@ module "security_group_for_ecs_node" {
       source_security_group_id = module.security_group_for_ecs_node.security_group_id
     }
   ]
+
+  egress_rules = ["all-all"]
+}
+
+module "security_group_for_alb" {
+  source = "terraform-aws-modules/security-group/aws"
+
+  name        = "${local.global_name_prefix}-alb-sg"
+  description = "sg for alb"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 65535
+      protocol    = "tcp"
+      description = "allow temp all"
+      cidr_blocks = "0.0.0.0/0"
+    }
+  ]
+
+  egress_rules = ["all-all"]
 }

@@ -3,7 +3,7 @@
 ################################################################################
 
 module "bastion_host" {
-  source  = "terraform-aws-modules/ec2-instance/aws"
+  source = "terraform-aws-modules/ec2-instance/aws"
 
   name = "${local.global_name_prefix}-bastion-host"
 

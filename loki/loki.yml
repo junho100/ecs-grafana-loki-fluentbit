@@ -1,0 +1,49 @@
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+common:
+  path_prefix: /loki # just path prefix
+
+# ingester
+# use local in-memory ring information because it's single cluster
+# store chunk in memory and bulk into long-term storage backends
+
+# responsible for writing log data to long-term storage backends
+# returning log data for in-memory queries on the read path
+ingester:
+  lifecycler:
+    address: 127.0.0.1 # IP address to advertise in the ring
+    ring: # backend storage to use for ring
+      kvstore:
+        store: inmemory
+      replication_factor: 1 # number of ingesters to write to and read from
+  chunk_idle_period: 5m # Any chunk not receiving new logs in this time will be flushed.
+  max_chunk_age: 5m # All chunks will be flushed when they hit this age, default is end of time.
+
+compactor:
+  working_directory: /loki/boltdb-shipper-compactor
+  shared_store: s3
+
+# configures the chunk index schema and where it is stored
+# boltdb-shipper make index stored in same store with chunk
+schema_config:
+  configs:
+    - from: 2021-05-12
+      store: boltdb-shipper
+      object_store: s3
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
+
+# config many possible stores for both the index and chunks
+storage_config:
+  boltdb_shipper:
+    shared_store: s3 # shared because s3 is also used for storing index
+    active_index_directory: /loki/boltdb-shipper-active # index file directory
+    cache_location: /loki/boltdb-shipper-cache # for cache
+  aws:
+    s3: s3://${LOKI_S3_ACCESS_KEY}:${LOKI_S3_SECRET_KEY}@ap-northeast-2/${S3_BUCKET_NAME} # make ecs task role
+    insecure: true
