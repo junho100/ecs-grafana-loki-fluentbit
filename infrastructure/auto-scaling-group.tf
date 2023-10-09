@@ -66,7 +66,7 @@ module "backend_autoscaling" {
     AmazonECSManaged = true
   }
 
-  user_data = base64encode("#!/bin/bash\necho ECS_CLUSTER=test >> /etc/ecs/ecs.config;")
+  user_data = base64encode("#!/bin/bash\necho ECS_CLUSTER=${format(module.naming.result, "ecs-cluster")} >> /etc/ecs/ecs.config;")
 
   # Required for  managed_termination_protection = "ENABLED"
   protect_from_scale_in = true
