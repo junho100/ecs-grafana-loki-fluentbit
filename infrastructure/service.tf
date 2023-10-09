@@ -2,6 +2,7 @@ module "ecs_grafana_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
 
   name                     = "test-grafana-service-1231231"
+  force_delete             = true
   cluster_arn              = module.ecs_cluster.arn
   requires_compatibilities = ["EC2"]
   tasks_iam_role_arn       = module.ecs_task_role.iam_role_arn
@@ -68,6 +69,7 @@ module "ecs_loki_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
 
   name                     = "test-loki-service"
+  force_delete             = true
   cluster_arn              = module.ecs_cluster.arn
   requires_compatibilities = ["EC2"]
   tasks_iam_role_arn       = module.ecs_task_role.iam_role_arn
@@ -150,6 +152,7 @@ module "ecs_backend_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
 
   name                     = "test-backend-service"
+  force_delete             = true
   cluster_arn              = module.ecs_cluster.arn
   requires_compatibilities = ["EC2"]
   tasks_iam_role_arn       = module.ecs_task_role.iam_role_arn
