@@ -1,7 +1,7 @@
 module "ecs_cluster" {
   source = "terraform-aws-modules/ecs/aws//modules/cluster"
 
-  cluster_name = "test"
+  cluster_name = format(module.naming.result, "ecs-cluster")
 
   default_capacity_provider_use_fargate = false
 

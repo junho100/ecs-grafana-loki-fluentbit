@@ -1,7 +1,7 @@
 module "ecs_task_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
 
-  role_name               = "ecs-task-role"
+  role_name               = format(module.naming.result, "ecs-task-role")
   role_requires_mfa       = false
   create_role             = true
   create_instance_profile = true
@@ -18,7 +18,7 @@ module "ecs_task_role" {
 module "ecs_task_execution_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
 
-  role_name               = "ecs-task-execution-role"
+  role_name               = format(module.naming.result, "ecs-task-execution-role")
   role_requires_mfa       = false
   create_role             = true
   create_instance_profile = true
@@ -36,7 +36,7 @@ module "ecs_task_execution_role" {
 module "task_policy" {
   source = "terraform-aws-modules/iam/aws//modules/iam-policy"
 
-  name        = "task-policy"
+  name        = format(module.naming.result, "task-policy")
   path        = "/"
   description = "task-policy"
 
@@ -57,7 +57,7 @@ EOF
 module "task_execution_policy" {
   source = "terraform-aws-modules/iam/aws//modules/iam-policy"
 
-  name        = "task-execution-policy"
+  name        = format(module.naming.result, "task-execution-policy")
   path        = "/"
   description = "task-execution-policy"
 
@@ -76,7 +76,7 @@ EOF
 }
 
 data "aws_iam_policy_document" "s3_bucket_policy" {
-  policy_id = "s3_bucket_lb_logs"
+  policy_id = format(module.naming.result, "s3-access-policy-document")
 
   statement {
     actions = [
@@ -98,7 +98,7 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
 }
 
 resource "aws_iam_user" "iam_user" {
-  name          = "test-log-iam"
+  name          = format(module.naming.result, "s3-loki-access-iam-user")
   force_destroy = true
 }
 
@@ -107,7 +107,7 @@ resource "aws_iam_access_key" "iam_user_access_key" {
 }
 
 resource "aws_iam_user_policy" "iam_user_policy" {
-  name   = "test-iam-user-policy"
+  name   = format(module.naming.result, "s3-loki-access-iam-user-policy")
   user   = aws_iam_user.iam_user.name
   policy = file("./files/s3-policy.json")
 }

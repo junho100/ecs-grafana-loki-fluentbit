@@ -1,7 +1,7 @@
 module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
-  bucket = "test-bucket-sdas676"
+  bucket = format(module.naming.result, "log-s3-bucket")
 
   force_destroy = true
 

@@ -5,7 +5,7 @@
 module "sg_for_bastion_host" {
   source = "terraform-aws-modules/security-group/aws"
 
-  name        = "${local.global_name_prefix}-bastion-host-sg"
+  name        = format(module.naming.result, "bastion-host-sg")
   description = "sg for bastion host"
   vpc_id      = module.vpc.vpc_id
 
@@ -32,7 +32,7 @@ module "sg_for_bastion_host" {
 module "sg_for_rds" {
   source = "terraform-aws-modules/security-group/aws"
 
-  name        = "${local.global_name_prefix}-rds-sg"
+  name        = format(module.naming.result, "rds-sg")
   description = "sg for rds instance"
   vpc_id      = module.vpc.vpc_id
 
@@ -69,7 +69,7 @@ module "sg_for_rds" {
 module "security_group_for_ecs_node" {
   source = "terraform-aws-modules/security-group/aws"
 
-  name        = "${local.global_name_prefix}-ecs-node-sg"
+  name        = format(module.naming.result, "ecs-node-sg")
   description = "sg for ecs nodes"
   vpc_id      = module.vpc.vpc_id
 
@@ -106,7 +106,7 @@ module "security_group_for_ecs_node" {
 module "security_group_for_alb" {
   source = "terraform-aws-modules/security-group/aws"
 
-  name        = "${local.global_name_prefix}-alb-sg"
+  name        = format(module.naming.result, "alb-sg")
   description = "sg for alb"
   vpc_id      = module.vpc.vpc_id
 

@@ -1,7 +1,7 @@
 module "ecs_grafana_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
 
-  name                     = "test-grafana-service-1231231"
+  name                     = format(module.naming.result, "grafana-service")
   force_delete             = true
   cluster_arn              = module.ecs_cluster.arn
   requires_compatibilities = ["EC2"]
@@ -22,13 +22,13 @@ module "ecs_grafana_service" {
   create_security_group = false
 
   container_definitions = {
-    grafana-11 = {
+    grafana-container = {
       privileged               = true
       image                    = var.grafana_docker_image_url
       readonly_root_filesystem = false
       port_mappings = [
         {
-          name          = "ecs-sample"
+          name          = format(module.naming.result, "grafana3000pm")
           containerPort = 3000
           hostPort      = 3000
           protocol      = "tcp"
@@ -52,7 +52,7 @@ module "ecs_grafana_service" {
   load_balancer = {
     service = {
       target_group_arn = element(module.alb.target_group_arns, 0)
-      container_name   = "grafana-11"
+      container_name   = "grafana-container"
       container_port   = 3000
     }
   }
@@ -68,7 +68,7 @@ module "ecs_grafana_service" {
 module "ecs_loki_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
 
-  name                     = "test-loki-service"
+  name                     = format(module.naming.result, "loki-service")
   force_delete             = true
   cluster_arn              = module.ecs_cluster.arn
   requires_compatibilities = ["EC2"]
@@ -90,27 +90,27 @@ module "ecs_loki_service" {
   wait_for_steady_state = true
 
   container_definitions = {
-    loki = {
+    loki-container = {
       privileged               = true
       image                    = var.loki_docker_image_url
       readonly_root_filesystem = false
       port_mappings = [
         {
-          name          = "loki-3100"
+          name          = format(module.naming.result, "loki3100pm")
           containerPort = 3100
           hostPort      = 3100
           protocol      = "tcp"
           appProtocol   = "http"
         },
         {
-          name          = "loki-7946"
+          name          = format(module.naming.result, "loki7946pm")
           containerPort = 7946
           hostPort      = 0
           protocol      = "tcp"
           appProtocol   = "http"
         },
         {
-          name          = "loki-9095"
+          name          = format(module.naming.result, "loki9095pm")
           containerPort = 9095
           hostPort      = 0
           protocol      = "tcp"
@@ -143,7 +143,7 @@ module "ecs_loki_service" {
         dns_name = "loki"
         port     = 3100
       }
-      port_name = "loki-3100"
+      port_name = format(module.naming.result, "loki3100pm")
     }
   }
 }
@@ -151,7 +151,7 @@ module "ecs_loki_service" {
 module "ecs_backend_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
 
-  name                     = "test-backend-service"
+  name                     = format(module.naming.result, "backend-service")
   force_delete             = true
   cluster_arn              = module.ecs_cluster.arn
   requires_compatibilities = ["EC2"]
@@ -172,7 +172,7 @@ module "ecs_backend_service" {
   create_security_group = false
 
   container_definitions = {
-    backend = {
+    backend-container = {
       privileged               = true
       readonly_root_filesystem = false
       essential                = true
@@ -190,7 +190,7 @@ module "ecs_backend_service" {
         }
       }
     }
-    fluentbit = {
+    fluentbit-container = {
       privileged               = true
       image                    = "public.ecr.aws/aws-observability/aws-for-fluent-bit:latest"
       readonly_root_filesystem = false

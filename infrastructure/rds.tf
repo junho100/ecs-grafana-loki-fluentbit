@@ -3,9 +3,9 @@
 ################################################################################
 
 module "rds_instance" {
-  source  = "terraform-aws-modules/rds/aws"
+  source = "terraform-aws-modules/rds/aws"
 
-  identifier = "${local.global_name_prefix}-rds"
+  identifier = format(module.naming.result, "rds")
 
   engine               = "mysql"
   engine_version       = "8.0"
@@ -22,10 +22,11 @@ module "rds_instance" {
   db_subnet_group_name   = aws_db_subnet_group.subnet_group_for_rds.name
   vpc_security_group_ids = [module.sg_for_rds.security_group_id]
 
-  create_cloudwatch_log_group     = false
+  create_cloudwatch_log_group = false
 
   skip_final_snapshot = true
   deletion_protection = false
+  allocated_storage   = 20
 }
 
 ################################################################################
@@ -33,6 +34,6 @@ module "rds_instance" {
 ################################################################################
 
 resource "aws_db_subnet_group" "subnet_group_for_rds" {
-  name       = "${local.global_name_prefix}-subnet-group"
+  name       = format(module.naming.result, "subnet-group")
   subnet_ids = module.vpc.database_subnets
 }

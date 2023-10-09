@@ -5,7 +5,7 @@
 module "bastion_host" {
   source = "terraform-aws-modules/ec2-instance/aws"
 
-  name = "${local.global_name_prefix}-bastion-host"
+  name = format(module.naming.result, "bastion-host-ec2")
 
   ami                         = "ami-0b23bb3616e3892a6"
   instance_type               = "t3.micro"

@@ -4,6 +4,7 @@ locals {
 }
 
 resource "random_string" "random" {
-  length  = 3
-  numeric = true
+  length      = 3
+  numeric     = true
+  min_numeric = 3
 }

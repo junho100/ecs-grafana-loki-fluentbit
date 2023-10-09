@@ -1,7 +1,7 @@
 module "alb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name = "test"
+  name = format(module.naming.result, "alb")
 
   load_balancer_type = "application"
 
@@ -11,7 +11,7 @@ module "alb" {
 
   target_groups = [
     {
-      name             = "grafana"
+      name             = format(module.naming.result, "tg")
       backend_protocol = "HTTP"
       backend_port     = 3000
       target_type      = "instance"
