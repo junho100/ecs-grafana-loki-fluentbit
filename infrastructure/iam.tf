@@ -109,6 +109,6 @@ resource "aws_iam_access_key" "iam_user_access_key" {
 resource "aws_iam_user_policy" "iam_user_policy" {
   name   = "test-iam-user-policy"
   user   = aws_iam_user.iam_user.name
-  policy = file("s3-policy.json")
+  policy = file("./files/s3-policy.json")
 }
 
