@@ -37,3 +37,15 @@ variable "backend_docker_image_url" {
   type        = string
   default     = ""
 }
+
+variable "environment" {
+  description = "environment"
+  type        = string
+  default     = "prod"
+}
+
+variable "project_name" {
+  description = "name of project"
+  type        = string
+  default     = "default-project"
+}
