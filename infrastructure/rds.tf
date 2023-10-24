@@ -13,10 +13,11 @@ module "rds_instance" {
   major_engine_version = "8.0"      # DB option group
   instance_class       = "db.t3.micro"
 
-  db_name  = var.db_name
-  username = var.db_username
-  password = var.db_password
-  port     = 3306
+  db_name                     = var.db_name
+  username                    = var.db_username
+  manage_master_user_password = false
+  password                    = var.db_password
+  port                        = 3306
 
   multi_az               = false
   db_subnet_group_name   = aws_db_subnet_group.subnet_group_for_rds.name

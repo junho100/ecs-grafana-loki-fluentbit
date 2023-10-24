@@ -176,9 +176,34 @@ module "ecs_backend_service" {
       privileged               = true
       readonly_root_filesystem = false
       essential                = true
-      image                    = "alpine:3.13"
-      entrypoint               = ["sh", "-c"]
-      command                  = ["/bin/sh -c \"while true; do sleep 15 ;echo hello_world; done\""]
+      image                    = var.backend_docker_image_url
+      port_mappings = [
+        {
+          name          = format(module.naming.result, "server8080pm")
+          containerPort = 8080
+          hostPort      = 8080
+          protocol      = "tcp"
+          appProtocol   = "http"
+        }
+      ]
+      environment = [
+        {
+          name  = "DB_URL"
+          value = module.rds_instance.db_instance_endpoint
+        },
+        {
+          name  = "DB_NAME"
+          value = module.rds_instance.db_instance_name
+        },
+        {
+          name  = "DB_USERNAME"
+          value = module.rds_instance.db_instance_username
+        },
+        {
+          name  = "DB_PASSWORD"
+          value = var.db_password
+        }
+      ]
       log_configuration = {
         logDriver = "awsfirelens"
         options = {
