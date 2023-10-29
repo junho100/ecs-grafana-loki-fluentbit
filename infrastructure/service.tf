@@ -176,12 +176,12 @@ module "ecs_backend_service" {
       privileged               = true
       readonly_root_filesystem = false
       essential                = true
-      image                    = var.backend_docker_image_url
+      image                    = "${aws_ecr_repository.backend_ecr_repository.repository_url}:latest"
       port_mappings = [
         {
           name          = format(module.naming.result, "server8080pm")
           containerPort = 8080
-          hostPort      = 8080
+          hostPort      = 0
           protocol      = "tcp"
           appProtocol   = "http"
         }

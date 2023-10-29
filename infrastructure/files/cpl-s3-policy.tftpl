@@ -1,0 +1,16 @@
+{
+  "Version": "2012-10-17",
+  "Id": "CodePipelineS3BackendPolicy",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:*",
+      "Resource": [
+        "${s3_bucket_arn}/*",
+        "${s3_bucket_arn}"
+      ]
+    }
+  ]
+}

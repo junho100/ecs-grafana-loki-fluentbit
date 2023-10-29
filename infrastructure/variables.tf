@@ -32,12 +32,6 @@ variable "loki_docker_image_url" {
   type        = string
 }
 
-variable "backend_docker_image_url" {
-  description = "backend docker image url"
-  type        = string
-  default     = ""
-}
-
 variable "environment" {
   description = "environment"
   type        = string
@@ -53,4 +47,24 @@ variable "project_name" {
     condition     = length(var.project_name) < 11
     error_message = "length of project name should be less than 10 words."
   }
+}
+
+variable "repository_name" {
+  description = "name of target repository name"
+  type        = string
+}
+
+variable "repository_owner" {
+  description = "name of repository owner"
+  type        = string
+}
+
+variable "target_branch_name" {
+  description = "name of target branch"
+  type        = string
+}
+
+variable "github_token" {
+  description = "github token for access repository"
+  type        = string
 }
