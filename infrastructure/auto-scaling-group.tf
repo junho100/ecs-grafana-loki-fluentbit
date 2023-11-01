@@ -34,7 +34,7 @@ module "monitering_autoscaling" {
 
   security_groups = [module.security_group_for_ecs_node.security_group_id]
 
-  target_group_arns = module.alb.target_group_arns
+  target_group_arns = [module.alb.target_groups.grafana-monit.arn]
 }
 
 module "backend_autoscaling" {
@@ -73,5 +73,5 @@ module "backend_autoscaling" {
 
   security_groups = [module.security_group_for_ecs_node.security_group_id]
 
-  target_group_arns = module.alb.target_group_arns
+  target_group_arns = [module.alb.target_groups.backend.arn]
 }

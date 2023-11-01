@@ -68,3 +68,13 @@ variable "github_token" {
   description = "github token for access repository"
   type        = string
 }
+
+variable "domain_name" {
+  description = "domain name for connecting service"
+  type        = string
+}
+
+variable "api_path_prefix" {
+  description = "api path prefix for api server domain."
+  type        = string
+}

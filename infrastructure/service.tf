@@ -51,7 +51,7 @@ module "ecs_grafana_service" {
 
   load_balancer = {
     service = {
-      target_group_arn = element(module.alb.target_group_arns, 0)
+      target_group_arn = module.alb.target_groups.grafana-monit.arn
       container_name   = "grafana-container"
       container_port   = 3000
     }
@@ -235,6 +235,14 @@ module "ecs_backend_service" {
         }
       }
       essential = true
+    }
+  }
+
+  load_balancer = {
+    service = {
+      target_group_arn = module.alb.target_groups.backend.arn
+      container_name   = "backend-container"
+      container_port   = 8080
     }
   }
 
