@@ -78,3 +78,13 @@ variable "api_path_prefix" {
   description = "api path prefix for api server domain."
   type        = string
 }
+
+variable "grafana_id" {
+  description = "grafana admin id"
+  type        = string
+}
+
+variable "grafana_pw" {
+  description = "grafana admin pw"
+  type        = string
+}

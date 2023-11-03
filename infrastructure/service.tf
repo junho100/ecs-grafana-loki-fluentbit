@@ -20,6 +20,7 @@ module "ecs_grafana_service" {
   memory                = 512
   subnet_ids            = module.vpc.private_subnets
   create_security_group = false
+  wait_for_steady_state = true
 
   container_definitions = {
     grafana-container = {
@@ -166,7 +167,7 @@ module "ecs_backend_service" {
       weight            = 1
     }
   }
-  cpu                   = 512
+  cpu                   = 1024
   memory                = 512
   subnet_ids            = module.vpc.private_subnets
   create_security_group = false
@@ -222,7 +223,7 @@ module "ecs_backend_service" {
       firelens_configuration = {
         type = "fluentbit"
         options = {
-          enable-ecs-log-metadata = "true"
+          enable-ecs-log-metadata = "false"
         }
       }
       log_configuration = {
