@@ -211,7 +211,7 @@ module "ecs_backend_service" {
           Name        = "loki"
           host        = "loki"
           port        = "3100"
-          labels      = "job=firelens"
+          labels      = "job=backend"
           line_format = "key_value"
         }
       }

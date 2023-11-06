@@ -1,5 +1,7 @@
 resource "grafana_dashboard" "loki_dashboard" {
-  config_json = file("./files/loki-dashboard.json")
+  config_json = templatefile("./files/loki-dashboard.tftpl", {
+    loki_datasource_uid = grafana_data_source.grafana_loki_datasource.uid
+  })
 
   depends_on = [module.ecs_grafana_service, grafana_data_source.grafana_loki_datasource]
 }
